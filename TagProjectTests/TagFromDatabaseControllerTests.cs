@@ -19,14 +19,13 @@ public class TagFromDatabaseControllerTests
     [Test]
     public async Task GetTags_WithPagination_ReturnsPaginatedData()
     {
-        // Arrange
+
         var page = 1;
         var pageSize = 10;
 
-        // Act
         var response = await _client.GetAsync($"/TagFromDatabase?page={page}&pageSize={pageSize}");
 
-        // Assert
+
         response.EnsureSuccessStatusCode();
         Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
         var content = await response.Content.ReadAsStringAsync();
