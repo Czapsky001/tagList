@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TagList.Model;
 using TagList.Repositories.TagRepo;
+using TagList.Services;
 
 namespace TagList.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class TagFromDatabaseController : ControllerBase
 {
-    private readonly ITagRepository tagRepository;
+    private readonly ITagService tagService;
     private readonly ILogger<TagFromDatabaseController> logger;
 
-    public TagFromDatabaseController(ITagRepository tagRepository, ILogger<TagFromDatabaseController> logger)
+    public TagFromDatabaseController(ITagService tagService, ILogger<TagFromDatabaseController> logger)
     {
-        this.tagRepository = tagRepository;
+        this.tagService = tagService;
         this.logger = logger;
     }
 
@@ -27,7 +28,7 @@ public class TagFromDatabaseController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Tag>>> GetTags([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string sortBy = "name", [FromQuery] string sortOrder = "asc")
     {
-        var tags = await tagRepository.GetAllAsync();
+        var tags = await tagService.GetAllAsync();
         var totalCount = tags.Count();
         var totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
         if (page >= totalPages)

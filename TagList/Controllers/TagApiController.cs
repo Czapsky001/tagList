@@ -3,6 +3,7 @@ using System.Net;
 using TagList.Convert;
 using TagList.Model;
 using TagList.Repositories.TagRepo;
+using TagList.Services;
 
 namespace TagList.Controllers;
 
@@ -12,13 +13,13 @@ public class TagApiController : ControllerBase
 {
     private readonly ILogger<TagApiController> _logger;
     private readonly IConvertJson _converter;
-    private readonly ITagRepository _tagRepository;
+    private readonly ITagService _tagService;
 
-    public TagApiController(ILogger<TagApiController> logger, IConvertJson converter, ITagRepository tagRepository)
+    public TagApiController(ILogger<TagApiController> logger, IConvertJson converter, ITagService tagService)
     {
         _logger = logger;
         _converter = converter;
-        _tagRepository = tagRepository;
+        _tagService = tagService;
     }
 
     /// <summary>
@@ -82,7 +83,7 @@ public class TagApiController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error with refreshing tags");
+            _logger.LogError(ex.Message, "Error with refreshing tags");
             return BadRequest();
         }
     }
@@ -93,13 +94,13 @@ public class TagApiController : ControllerBase
     /// <returns></returns>
     private async Task CalculateAndSetPercentage()
     {
-        var allTags = await _tagRepository.GetAllAsync();
+        var allTags = await _tagService.GetAllAsync();
         var totalCount = allTags.Sum(tag => tag.Count);
 
         foreach (var tag in allTags)
         {
             tag.Count = Math.Round((tag.Count / totalCount) * 100, 2);
-            await _tagRepository.UpdateAsync(tag);
+            await _tagService.UpdateAsync(tag);
         }
     }
 
@@ -115,10 +116,10 @@ public class TagApiController : ControllerBase
     {
         foreach (var item in result)
         {
-            var existTag = await _tagRepository.GetByNameAsync(item.Name);
+            var existTag = await _tagService.GetByNameAsync(item.Name);
             if (existTag == null)
             {
-                await _tagRepository.AddAsync(item);
+                await _tagService.AddAsync(item);
             }
         }
     }
