@@ -1,0 +1,6 @@
+@TagList_HostAddress = http://localhost:5186
+
+GET {{TagList_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
