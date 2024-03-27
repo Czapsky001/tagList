@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TagList")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bfcc412bf6295a38ef9c6e63b1c77b9341f4109")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6fb3bf26982981284356a076aeb0362807a6261")]
 [assembly: System.Reflection.AssemblyProductAttribute("TagList")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TagList")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

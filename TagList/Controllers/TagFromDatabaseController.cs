@@ -15,6 +15,15 @@ public class TagFromDatabaseController : ControllerBase
         this.tagRepository = tagRepository;
         this.logger = logger;
     }
+
+    /// <summary>
+    /// pagination and sort by name, count
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="sortBy"></param>
+    /// <param name="sortOrder"></param>
+    /// <returns>Tags</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Tag>>> GetTags([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string sortBy = "name", [FromQuery] string sortOrder = "asc")
     {

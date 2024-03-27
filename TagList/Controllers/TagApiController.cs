@@ -21,6 +21,10 @@ public class TagApiController : ControllerBase
         _tagRepository = tagRepository;
     }
 
+    /// <summary>
+    /// Get all tags from the Stack Overflow API.
+    /// </summary>
+    /// <returns>HTTP response.</returns>
     [HttpGet]
     public async Task<IActionResult> GetAllTagsFromApi()
     {
@@ -63,7 +67,30 @@ public class TagApiController : ControllerBase
 
         return Ok();
     }
+    /// <summary>
+    /// refresh tags
+    /// </summary>
+    /// <returns>IActionResult</returns>
 
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTagsFromApi()
+    {
+        try
+        {
+            await GetAllTagsFromApi();
+            return Ok("Tags refreshed successfully.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error with refreshing tags");
+            return BadRequest();
+        }
+    }
+
+    /// <summary>
+    /// calculate "count" in tags
+    /// </summary>
+    /// <returns></returns>
     private async Task CalculateAndSetPercentage()
     {
         var allTags = await _tagRepository.GetAllAsync();
@@ -79,7 +106,11 @@ public class TagApiController : ControllerBase
 
 
 
-
+    /// <summary>
+    /// add Tags
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
     private async Task ProcessTagItems(List<Tag> result)
     {
         foreach (var item in result)
