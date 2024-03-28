@@ -111,7 +111,7 @@
         "projectName": "TagProjectTests",
         "projectPath": "C:\\Users\\Szymon\\work\\privateProjects\\TagList\\TagProjectTests\\TagProjectTests.csproj",
         "packagesPath": "C:\\Users\\Szymon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Szymon\\work\\privateProjects\\TagList\\TagProjectTests\\obj\\",
+        "outputPath": "C:\\Users\\Szymon\\work\\privateProjects\\tagList\\TagProjectTests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
