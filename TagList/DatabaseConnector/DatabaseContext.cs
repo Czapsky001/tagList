@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TagList.Model;
+using static TagList.Startup;
 
 
 namespace TagList.DatabaseConnector
@@ -15,6 +16,12 @@ namespace TagList.DatabaseConnector
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Ustawienie połączenia z bazą danych PostgreSQL
+            var connectionString = DatabaseConfig.GetConnectionString();
+            optionsBuilder.UseNpgsql(connectionString);
         }
     }
 }

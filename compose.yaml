@@ -1,5 +1,6 @@
 services:
   server:
+    image: Czapsky/hub/taglist-app:1.0.0
     build:
       context: .
       target: final
@@ -8,6 +9,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=example
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres123
   db:
     image: postgres
     restart: always

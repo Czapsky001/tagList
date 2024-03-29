@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Globalization;
+﻿using Microsoft.EntityFrameworkCore;
 using TagList.Convert;
 using TagList.DatabaseConnector;
 using TagList.Repositories.TagRepo;
 using TagList.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TagList
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,12 +19,6 @@ namespace TagList
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture(CultureInfo.InvariantCulture);
-                options.SupportedCultures = new List<CultureInfo> { CultureInfo.InvariantCulture };
-                options.SupportedUICultures = new List<CultureInfo> { CultureInfo.InvariantCulture };
-            });
 
             services.AddScoped<IConvertJson, ConvertJson>();
             services.AddScoped<ITagRepository, TagRepository>();
@@ -37,16 +26,42 @@ namespace TagList
 
             services.AddControllers();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-            var connectionString = Configuration["ConnectionString"];
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+            var connectionString = DatabaseConfig.GetConnectionString();
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseNpgsql(connectionString));
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var serviceProvider = app.ApplicationServices;
+
+            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                var db = serviceProvider.GetRequiredService<DatabaseContext>().Database;
+
+                logger.LogInformation("Migrating database...");
+
+                while (!db.CanConnect())
+                {
+                    logger.LogInformation("Database not ready yet; waiting...");
+                    Thread.Sleep(1000);
+                }
+
+                try
+                {
+                    db.Migrate();
+                    logger.LogInformation("Database migrated successfully.");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
 
             if (env.IsDevelopment())
             {
