@@ -1,6 +1,6 @@
 services:
   server:
-    image: Czapsky/hub/taglist-app:1.0.0
+    image: szymonczap/taglist-app:latest
     build:
       context: .
       target: final

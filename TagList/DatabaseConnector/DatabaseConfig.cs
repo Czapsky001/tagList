@@ -10,8 +10,6 @@ public class DatabaseConfig
         string database = Environment.GetEnvironmentVariable("DATABASE_NAME");
         string user = Environment.GetEnvironmentVariable("DATABASE_USER");
         string password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
-        var x = $"Server=localhost;Port={port};Database={database};User Id={user};Password={password};";
-        Console.WriteLine(x);
         return $"Server=db;Port={port};Database={database};User Id={user};Password={password};";
 
 

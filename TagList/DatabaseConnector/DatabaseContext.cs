@@ -19,7 +19,6 @@ namespace TagList.DatabaseConnector
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Ustawienie połączenia z bazą danych PostgreSQL
             var connectionString = DatabaseConfig.GetConnectionString();
             optionsBuilder.UseNpgsql(connectionString);
         }
